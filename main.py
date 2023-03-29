@@ -8,35 +8,54 @@ def e_approx(x, n):
         approx += x ** i / math.factorial(i)
     return approx
 
-def determine_error(function, original):
-    i = 1
-    error = 2
-    while error > 1e-15:
-        approx = function(1, i)
-        exact = original(1)
-        error = abs(approx - exact)
-        print(f'{i} terms: Approx = {approx}, Exact = {exact}, Error = {error}')
-        i += 1
-
-determine_error(e_approx, math.exp)
+def sin_approx(x, n):
+    approx = 0
+    for i in range(n):
+        approx += (-1) ** i * (x ** (2 * i + 1) / math.factorial(2 * i + 1))
+    return approx
 
 def cos_approx(x, n):
     approx = 0
     for i in range(n):
-        coef = (-1) ** i
-        num = x ** (2 * i)
-        denom = math.factorial(2 * i)
-        approx += coef * (num / denom)
+        approx += (-1) ** i * (x ** (2 * i) / math.factorial(2 * i))
     return approx
 
-# angles = np.arange(-2*np.pi,2*np.pi,0.1)
-# p_cos = np.cos(angles)
-# t_cos = [cos_approx(angle,3) for angle in angles]
+def atan_approx(x, n):
+    approx = 0
+    for i in range(n):
+        approx += (-1) ** i * (x ** (2 * i + 1) / (2 * i + 1))
+    return approx
 
-# fig, ax = plt.subplots()
-# ax.plot(angles,p_cos)
-# ax.plot(angles,t_cos)
-# ax.set_ylim([-5,5])
-# ax.legend(['cos() function','Taylor Series - 3 terms'])
+def ln_approx(x, n):
+    approx = 0
+    for i in range(1, n):
+        approx += (-1) ** (i - 1) * ((x - 1) ** (i) / i)
+    return approx
 
-# plt.show()
+def determine_error(function, original, c):
+    i = 1
+    error = 2
+    while error > 1e-16:
+        approx = function(c, i)
+        exact = original(c)
+        error = abs(approx - exact)
+        print(f'{i} terms: Approx = {approx}, Exact = {exact}, Error = {error}')
+        i += 1
+
+def plot(function, npfunc, xbounds, ybounds):
+    x = np.arange(xbounds[0], xbounds[1], 0.1)
+    p = lambda x: npfunc(x)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, p)
+
+    for i in range(1, 10, 2):
+        t = [function(x1,i) for x1 in x]
+        ax.plot(x,t)
+    ax.set_ylim(ybounds)
+    ax.legend(['ln() function', 'Taylor Series - 1 term', 'Taylor Series - 2 terms', 'Taylor Series - 3 terms', 'Taylor Series - 4 terms', 'Taylor Series - 5 terms'])
+
+    plt.show()
+
+determine_error(ln_approx, math.log, 1.5)
+plot(ln_approx, np.log, [-2, 2], [-6, 2])
