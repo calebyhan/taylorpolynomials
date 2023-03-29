@@ -1,3 +1,5 @@
+**Project Portfolio: https://github.com/calebyhan/CalebHan** 
+
 Approximating functions with taylor polynomials. Functions explored: sin(x), cos(x), tan⁻¹(x), eˣ, ln(x).
 
 * Approximating Taylor Series and finding error
